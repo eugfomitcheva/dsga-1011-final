@@ -1,2 +1,1 @@
-# dsga-1011-final
-NLP Final Project // SummaReranker
+# SummaReranker Replication Project

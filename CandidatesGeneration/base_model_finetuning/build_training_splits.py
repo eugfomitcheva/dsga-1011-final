@@ -6,6 +6,8 @@ import numpy as np
 import pickle
 
 sys.path.append("/data/mathieu/2nd_stage_summarization/")
+sys.path.append("/Users/domaghale/dsga-1011-final/CandidatesGeneration/")
+sys.path.append('/content/MyDrive/MyDrive/NLP/SummaReranker-main/src')
 
 from tqdm import tqdm
 from shutil import copyfile
@@ -17,7 +19,7 @@ from common.utils import seed_everything
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--seed', type = int, default = 42)
-parser.add_argument('--dataset', type=str, default = "reddit",
+parser.add_argument('--dataset', type=str, default = "xsum",
                     choices=["cnndm", "xsum", "reddit"])
 
 args = parser.parse_args()

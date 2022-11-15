@@ -6,6 +6,8 @@ import torch.nn as nn
 import sys
 
 sys.path.append("/data/mathieu/SummaReranker/src/")
+sys.path.append("/Users/domaghale/dsga-1011-final/CandidatesGeneration/")
+sys.path.append('/content/MyDrive/MyDrive/NLP/SummaReranker-main/src')
 
 from tqdm import tqdm
 from torch.utils.data import DataLoader, Dataset, RandomSampler, SequentialSampler
@@ -39,7 +41,7 @@ parser.add_argument("--local_rank", type=int, default = 0, help="Local rank. Nec
 parser.add_argument('--train', type=bool, default = True)
 
 # data
-parser.add_argument('--dataset', type=str, default = "reddit",
+parser.add_argument('--dataset', type=str, default = "xsum",
                     choices=["cnndm", "xsum", "reddit"])
 # train
 parser.add_argument('--train_dataset', type = str, default = "train")
@@ -87,7 +89,7 @@ parser.add_argument('--show_summaries_count', type=int, default = 1) # batches
 
 # export
 parser.add_argument('--n_checkpoints_to_save', type=int, default = 2)
-parser.add_argument('--save_model_path', type=str, default = "ft_saved_models/reddit/pegasus_reddit_train_1")
+parser.add_argument('--save_model_path', type=str, default = "ft_saved_models/xsum/pegasus_xsum_train_1")
 
 args = parser.parse_args()
 

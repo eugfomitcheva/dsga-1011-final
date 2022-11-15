@@ -6,6 +6,8 @@ import sys
 import gc
 
 sys.path.append("/data/mathieu/SummaReranker/src/") # todo: change to your folder path
+sys.path.append("/Users/domaghale/dsga-1011-final/CandidatesGeneration/")
+sys.path.append('/content/MyDrive/MyDrive/NLP/SummaReranker-main/src')
 
 from time import time 
 from nltk.tokenize import sent_tokenize
@@ -25,7 +27,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--seed', type = int, default = 42)
 
 # data
-parser.add_argument('--dataset', type=str, default = "reddit", 
+parser.add_argument('--dataset', type=str, default = "xsum", 
                     choices= ["cnndm", "xsum", "reddit"])
 parser.add_argument('--val_dataset', type = str, default = "val",
                     choices = ["train", "first_half_train_shuffled", "second_half_train_shuffled", "val", "test"])

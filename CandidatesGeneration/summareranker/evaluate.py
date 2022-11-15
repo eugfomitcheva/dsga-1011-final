@@ -6,6 +6,8 @@ import time
 import torch
 
 sys.path.append("/data/mathieu/SummaReranker/src/")
+sys.path.append("/Users/domaghale/dsga-1011-final/CandidatesGeneration/")
+sys.path.append('/content/MyDrive/MyDrive/NLP/SummaReranker-main/src')
 
 from tqdm import tqdm
 from transformers import RobertaTokenizerFast, RobertaModel
@@ -25,7 +27,7 @@ parser.add_argument('--seed', type=int, default = 42)
 parser.add_argument('--cuda', type=bool, default = True)
 
 # data
-parser.add_argument('--dataset', type=str, default = "reddit", 
+parser.add_argument('--dataset', type=str, default = "xsum", 
                     choices= ["cnndm", "xsum", "reddit"])
 parser.add_argument('--generation_methods_str', type=str, default = "diverse_beam_search")
 parser.add_argument('--scoring_methods_str', type=str, default = "rouge_1+rouge_2+rouge_l")
@@ -53,7 +55,7 @@ parser.add_argument('--use_aux_loss', type = bool, default = False)
 parser.add_argument('--expert_hidden_size', type = int, default = 1024)
 parser.add_argument('--tower_hidden_size', type = int, default = 1024)
 parser.add_argument('--load_model', type=bool, default = True)
-parser.add_argument('--load_model_path', type=str, default = "/data/mathieu/2nd_stage_summarization/4_supervised_multitask_reranking/saved_models/reddit/multitask_3_tasks_ablation_5/checkpoint-1000/pytorch_model.bin")
+parser.add_argument('--load_model_path', type=str, default = "/data/mathieu/2nd_stage_summarization/4_supervised_multitask_reranking/saved_models/xsum/multitask_3_tasks_ablation_5/checkpoint-1000/pytorch_model.bin")
 # todo: change the path to where you saved the SummaReranker checkpoint!
 
 # optimization

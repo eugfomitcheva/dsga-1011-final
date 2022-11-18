@@ -22,7 +22,7 @@ parser.add_argument('--debug', type = bool, default = False)
 parser.add_argument('--debug_size', type = int, default = 30)
 
 # data
-parser.add_argument('--dataset', type = str, default = "reddit",
+parser.add_argument('--dataset', type = str, default = "xsum",
                     choices = ["cnndm", "xsum", "reddit"])
 parser.add_argument('--val_max_size', type = int, default = 100000)
 parser.add_argument('--check_data_pipe', type = bool, default = False)
@@ -36,7 +36,7 @@ parser.add_argument('--model', type = str, default = "google/pegasus-large",
 parser.add_argument('--hidden_size', type = int, default = 768)
 parser.add_argument('--cache_dir', type = str, default = "../../../hf_models/pegasus-large/")
 parser.add_argument('--load_model', type = bool, default = True)
-parser.add_argument('--save_model_path', type = str, default = "ft_saved_models/reddit/pegasus_reddit_train_1/checkpoint-1200/pytorch_model.bin")
+parser.add_argument('--save_model_path', type = str, default = "ft_saved_models/xsum/pegasus_xsum_train_1/checkpoint-1200/pytorch_model.bin")
 
 # evaluation
 parser.add_argument('--inference_bs', type = int, default = 8)

@@ -1,5 +1,5 @@
 python -m torch.distributed.launch --nproc_per_node=1 --master_port=2000 main.py \
---dataset reddit \
+--dataset xsum \
 --generation_methods_str diverse_beam_search \
 --scoring_methods_str rouge_1+rouge_2+rouge_l \
 --base_model_type pegasus \
@@ -13,4 +13,4 @@ python -m torch.distributed.launch --nproc_per_node=1 --master_port=2000 main.py
 --inference_bs 60 \
 --lr 1e-5 \
 --save_model True \
---save_model_path saved_models/reddit/model_1 \
+--save_model_path saved_models/xsum/model_1 \

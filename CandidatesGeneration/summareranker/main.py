@@ -9,6 +9,8 @@ import time
 import sys
 
 sys.path.append("/data/mathieu/SummaReranker/src/")
+sys.path.append("/Users/domaghale/dsga-1011-final/CandidatesGeneration/")
+sys.path.append('/content/MyDrive/MyDrive/NLP/SummaReranker-main/src')
 
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Tuple, Union
 from transformers import Trainer, TrainingArguments, default_data_collator
@@ -34,7 +36,7 @@ parser.add_argument('--sharded_ddp', type=str, default="simple") # ["", "simple"
 parser.add_argument("--local_rank", type=int, default=0, help="Local rank. Necessary for using the torch.distributed.launch utility.")
 
 # data
-parser.add_argument('--dataset', type=str, default = "reddit",
+parser.add_argument('--dataset', type=str, default = "xsum",
                     choices= ["cnndm", "xsum", "reddit"])
 parser.add_argument('--generation_methods_str', type=str, default = "diverse_beam_search")
 parser.add_argument('--scoring_methods_str', type=str, default = "rouge_1+rouge_2+rouge_l")
@@ -110,7 +112,7 @@ parser.add_argument('--metric_for_best_model', type=str, default="overall_sum",
 
 # export
 parser.add_argument('--save_model', type=bool, default=True)
-parser.add_argument('--save_model_path', type=str, default="saved_models/reddit/model_1")
+parser.add_argument('--save_model_path', type=str, default="saved_models/xsum/model_1")
 
 args = parser.parse_args()
 args.generation_methods = args.generation_methods_str.split("+")

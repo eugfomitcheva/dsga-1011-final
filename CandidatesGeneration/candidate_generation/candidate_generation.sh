@@ -1,5 +1,5 @@
 python main_candidate_generation.py \
---dataset reddit \
+--dataset xsum \
 --model_type pegasus \
 --model google/pegasus-large \
 --model_name pegasus_unsupervised \

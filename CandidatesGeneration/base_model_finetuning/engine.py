@@ -3,6 +3,8 @@ import numpy as np
 import sys
 
 sys.path.append("/data/mathieu/SummaReranker/src/")
+sys.path.append("/Users/domaghale/dsga-1011-final/CandidatesGeneration/")
+sys.path.append('/content/MyDrive/MyDrive/NLP/SummaReranker-main/src')
 
 from tqdm import tqdm
 

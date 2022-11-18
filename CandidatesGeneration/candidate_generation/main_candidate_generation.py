@@ -24,7 +24,7 @@ parser.add_argument('--debug', type = bool, default = False)
 parser.add_argument('--debug_size', type = int, default = 10)
 
 # data
-parser.add_argument('--dataset', type=str, default = "reddit", 
+parser.add_argument('--dataset', type=str, default = "xsum", 
                     choices= ["cnndm", "xsum", "reddit"])
 
 # model
@@ -46,7 +46,8 @@ parser.add_argument('--cache_dir', type = str,
                     default = "../../../hf_models/pegasus-large-cnndm/")
 parser.add_argument('--load_model', type = bool, default = False)
 parser.add_argument('--load_model_path', type = str,
-                    default = "../base_model_finetuning/ft_saved_models/reddit/pegasus_reddit_train_1/checkpoint-5/pytorch_model.bin") # todo: change to where you saved the finetuned checkpoint
+                    default = "../base_model_finetuning/ft_saved_models/xsum/pegasus_xsum_train_1/checkpoint-5/pytorch_model.bin") 
+                    # default = "../base_model_finetuning/ft_saved_models/reddit/pegasus_reddit_train_1/checkpoint-5/pytorch_model.bin") # todo: change to where you saved the finetuned checkpoint
 
 # summary generation
 parser.add_argument('--val_dataset', type=str, default = "test",

@@ -5,27 +5,29 @@ from time import time
 
 
 class MultitaskRerankingDataset:
-    def __init__(self, mode, tokenizer, texts, scored_summaries, labels, max_len,max_summary_len):
+    def __init__(self, mode, tokenizer, texts, summaries, labels,scores, max_len,max_summary_len):
         self.mode = mode
         self.tokenizer = tokenizer
         self.texts = texts
-        self.scored_summaries = scored_summaries
+        self.summaries = summaries
         self.labels = labels
+        self.scores = scores
         self.max_length = max_len
         self.max_summary_length = max_summary_len
+        self.sep_symbol = "[SEP]"
 
     def __len__(self):
         return len(self.texts)
 
     def __getitem__(self, item):
+        print('--HERE----')
         text = self.texts[item]
         label = self.labels[item]
-        scored_summaries = self.scored_summaries[item]
-        summary_candidates = scored_summaries[0]
-        summary_scores = scored_summaries[1]
+        summary_candidates = self.summaries[item]
+        summary_scores = self.scores[item]
         for i in range(len(summary_scores)):
             # Re-adjust for BERTScore
-            if min(summary_scores[i]) > 0.0 and max(summary_scores[i]) < 1.0:
+            if min(summary_scores[i]) > 0 and max(summary_scores[i]) < 1.0:
                 for j in range(len(summary_scores[i])):
                     summary_scores[i][j] *= 100
             # Re-adjust for BARTScore
@@ -76,8 +78,11 @@ class MultitaskRerankingDatasetTrain:
         self.scores = scores
         self.max_length = max_len
         self.max_summary_length = max_summary_len
+        self.sep_symbol = "[SEP]"
+
 
     def __len__(self):
+        print(len(self.texts))
         return len(self.texts)
 
     def __getitem__(self, item):

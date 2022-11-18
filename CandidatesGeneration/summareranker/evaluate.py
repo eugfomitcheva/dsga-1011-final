@@ -57,7 +57,7 @@ parser.add_argument('--load_model_path', type=str, default = "/data/mathieu/2nd_
 # todo: change the path to where you saved the SummaReranker checkpoint!
 
 # optimization
-parser.add_argument('--inference_bs', type=int, default = 60)
+parser.add_argument('--inference_bs', type=int, default = 10)
 
 # generation
 parser.add_argument('--stemmer', type = bool, default = True)
@@ -163,7 +163,7 @@ def main(args):
         val_texts += batch_texts
         batch_labels = batch["label"]
         val_labels += batch_labels
-
+        print(i)
         text_and_summaries_ids = batch["text_and_summaries_input_ids"].to(device)
         text_and_summaries_mask = batch["text_and_summaries_attn_mask"].to(device)
         scores = batch["scores"]

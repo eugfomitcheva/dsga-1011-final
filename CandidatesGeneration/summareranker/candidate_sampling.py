@@ -6,7 +6,7 @@ import torch
 def candidate_subsampling(mode, ids, masks, scores, labels, args):
     selected_idx = list(range(len(ids)))
     # remove duplicates
-    if torch.sum(mode) > 0 and args.filter_out_duplicates:
+    if torch.sum(mode) > 0 :
         idx = unique_idx(scores)
         selected_idx = [selected_idx[idx[k]] for k in range(len(idx))]
         ids = ids[idx]
@@ -14,9 +14,9 @@ def candidate_subsampling(mode, ids, masks, scores, labels, args):
         scores = scores[:, idx]
         labels = labels[:, idx]
     # only select a few positive and a few negative candidates
-    if torch.sum(mode) > 0 and args.prune_candidates:
+    if torch.sum(mode) > 0 :
         idx_to_keep = prune_idx(scores, args)
-        idx_to_keep = idx_to_keep[:args.max_n_candidates]
+        idx_to_keep = idx_to_keep[:2]
         selected_idx = [selected_idx[idx_to_keep[k]] for k in range(len(idx_to_keep))]
         ids = ids[idx_to_keep]
         masks = masks[idx_to_keep]
@@ -46,6 +46,7 @@ def unique_idx(t):
 
 
 def prune_idx(scores, args):
+    
     s = scores.detach().cpu().numpy()
     # take top + bottom ones with regards to the sum 
     if len(s.shape) == 2:
@@ -53,11 +54,13 @@ def prune_idx(scores, args):
     else:
         reduced_s = s
     sort_idx = np.argsort(reduced_s)[::-1]
-    if args.sampling_strat == "bottom":
-        neg = list(sort_idx[-args.n_negatives:])
-    elif args.sampling_strat == "random":
-        p = np.random.permutation(len(sort_idx) - args.n_positives)
-        neg = list(sort_idx[args.n_positives:][p][:args.n_negatives])
+    # if args.sampling_strat == "bottom":
+    #     neg = list(sort_idx[-args.n_negatives:])
+    # # elif args.sampling_strat == "random":
+    # #     p = np.random.permutation(len(sort_idx) - args.n_positives)
+    # #     neg = list(sort_idx[args.n_positives:][p][:args.n_negatives])
+    neg = list(sort_idx[-args.n_negatives:])
+
     idx_to_keep = list(sort_idx)[:args.n_positives] + neg
 
     idx_to_keep = np.array(idx_to_keep)

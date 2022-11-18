@@ -6,7 +6,9 @@ from scipy.stats import pearsonr
 
 from utils import rank_array
 from candidate_sampling import candidate_subsampling
-from model_moe import MoE, MLPTower, MLPExpert
+# from model_moe import MoE, MLPTower, MLPExpert
+from model_moe import *
+
 
 
 
@@ -16,6 +18,15 @@ class ModelMultitaskBinary(nn.Module):
         super(ModelMultitaskBinary, self).__init__()
         self.tokenizer = tokenizer
         self.args = args
+        self.args.generation_methods = ["diverse_beam_search"]
+        self.args.n_positives = 1
+        self.args.n_negatives = 1
+        self.args.scoring_methods_str = ["rouge_1","rouge_2","rouge_l"]
+        self.args.num_beams = 5
+
+
+
+
 
         # LM
         self.pretrained_model = pretrained_model
@@ -26,7 +37,7 @@ class ModelMultitaskBinary(nn.Module):
         # MoE
         self.moe = MoE(args.device, args.n_tasks, args.hidden_size, args.hidden_size, args.num_experts, args.expert_hidden_size, args.k)
         # towers - one for each task
-        self.towers = nn.ModuleList([MLPTower(args.hidden_size, args.tower_hidden_size) for i in range(args.n_tasks)])
+        self.towers = nn.ModuleList([MLPTower(args.tower_hidden_size) for i in range(args.n_tasks)])
         self.sigmoid = nn.Sigmoid()
 
         self.loss = nn.BCEWithLogitsLoss()
@@ -124,11 +135,13 @@ class ModelMultitaskBinary(nn.Module):
             labels_i = torch.zeros(scores_i.shape, device = self.pretrained_model.device)
             for j in range(self.args.n_tasks):
                 best_j = scores_i[j].max()
-                if self.args.sharp_pos:
-                    if best_j > scores_i[j].min():
-                        labels_i[j][scores_i[j] == best_j] = 1
-                else:
-                    labels_i[j][scores_i[j] == best_j] = 1
+                # if self.args.sharp_pos:
+                #     if best_j > scores_i[j].min():
+                #         labels_i[j][scores_i[j] == best_j] = 1
+                # else:
+                #     labels_i[j][scores_i[j] == best_j] = 1
+                labels_i[j][scores_i[j] == best_j] = 1
+
             original_labels_i = labels_i.clone().detach()
 
             # candidate sampling
@@ -140,15 +153,13 @@ class ModelMultitaskBinary(nn.Module):
             # model output
             # LM encoding
             outputs_i = self.pretrained_model(
-                input_ids = text_and_summaries_ids_i, attention_mask = text_and_summaries_mask_i, output_hidden_states = True
+                input_ids = text_and_summaries_ids_i, attention_mask = text_and_summaries_mask_i, output_hidden_states = True,decoder_input_ids=text_and_summaries_ids_i
             )
-            encs = outputs_i["last_hidden_state"]
+            # encs = outputs_i["last_hidden_state"]
+            encs = outputs_i["encoder_last_hidden_state"]
             encs = encs[:, 0, :]
             # shared bottom
-            if self.args.use_shared_bottom:
-                preds_i = self.fc2(self.relu(self.fc1(encs)))
-            else:
-                preds_i = encs
+            preds_i = self.fc2(self.relu(self.fc1(encs)))
             # MoE
             train = torch.sum(mode) > 0
             preds_i, aux_loss_i = self.moe(preds_i, train = train, collect_gates = not(train))
@@ -192,8 +203,6 @@ class ModelMultitaskBinary(nn.Module):
                 rank_i_j = np.min(ranks[all_pos_idx])
                 rank[j] = rank[j] + rank_i_j
             loss_i = loss_i / self.args.n_tasks
-            if self.args.use_aux_loss:
-                loss_i = loss_i + aux_loss_i
             loss = loss + loss_i
             total_predictions /= self.args.n_tasks
             total_prediction_idx = np.argmax(total_predictions)
